@@ -12,7 +12,7 @@ class AdminUserOut(BaseModel):
     email: str
     created_at: datetime
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class MediaAssetCreate(BaseModel):
@@ -30,4 +30,4 @@ class MediaAssetOut(BaseModel):
     file_url: str
     created_at: datetime
     class Config:
-        orm_mode = True
+        from_attributes = True

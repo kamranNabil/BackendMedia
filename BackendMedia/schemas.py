@@ -1,19 +1,17 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
 
-
 class AdminUserCreate(BaseModel):
     email: str
     password: str
-
 
 class AdminUserOut(BaseModel):
     id: int
     email: str
     created_at: datetime
-    class Config:
-        orm_mode = True
 
+    class Config:
+        from_attributes = True   
 
 class MediaAssetCreate(BaseModel):
     title: str 
@@ -29,5 +27,6 @@ class MediaAssetOut(BaseModel):
     type: str
     file_url: str
     created_at: datetime
+
     class Config:
-        orm_mode = True
+        from_attributes = True   
