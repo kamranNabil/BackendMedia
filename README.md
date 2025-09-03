@@ -1,113 +1,104 @@
-📘 BackendMedia
+# BackendMedia
 
-A backend platform to manage media content with secure user authentication and media streaming support.
-This repository contains the full FastAPI backend for handling media uploads, authentication, and streaming URL generation.
+A media platform backend built with **FastAPI**, featuring Redis caching, rate limiting, authentication, and Dockerized deployment.
 
-📂 Project Structure
+---
+
+## Features
+
+- User authentication (`signup` & `login`) with JWT tokens
+- CRUD operations for media assets
+- Redis caching for `GET /media/:id/analytics`
+- Rate limiting for `POST /media/:id/view`
+- SQLite database for development (can switch to other DBs)
+- Fully tested using **PyTest**
+- Dockerized for easy setup
+
+---
+
+## Requirements
+
+- Python 3.11+
+- Docker & Docker Compose
+- Redis
+- Git
+
+---
+
+## Project Structure
+
 BackendMedia/
-├── main.py             # FastAPI app entrypoint
-├── models.py           # Database models
-├── database.py         # DB connection and setup
-├── auth.py             # Authentication routes
-├── media.py            # Media routes (upload, fetch, streaming)
-├── users.py            # User-related operations (profile, details)
-├── schemas.py          # Pydantic models for request/response
-├── utils.py            # Helper functions (JWT, password hashing, etc.)
-├── requirements.txt    # Python dependencies
-├── venv/               # Virtual environment
+├─ app/
+│ ├─ init.py
+│ ├─ main.py
+│ ├─ auth.py
+│ ├─ database.py
+│ ├─ models.py
+│ ├─ media.py
+│ ├─ redis_client.py
+│ ├─ utils.py
+│ └─ limiter.py
+├─ tests/
+│ └─ test_media.py
+├─ Dockerfile
+├─ docker-compose.yaml
+├─ requirements.txt
+├─ .env.example
+└─ README.md
 
-🚀 Features
+## Setup
 
-🔐 Authentication
+1. **Clone the repository**
 
-User signup & login with JWT tokens
-
-Password hashing with bcrypt
-
-Token verification and expiration handling
-
-📺 Media Management
-
-Upload and manage media entries
-
-Fetch media details with filtering support
-
-Generate streaming URLs for secure access
-
-👤 User Management
-
-User profile handling
-
-Update user details (WIP)
-
-⚙️ System
-
-Clean modular structure (auth.py, media.py, users.py)
-
-SQLite3 database with SQLAlchemy ORM
-
-Logging and debugging enabled
-
-🛠️ Tech Stack
-
-Python 3.13
-
-FastAPI 0.116.1
-
-SQLAlchemy 2.0
-
-Uvicorn 0.35.0
-
-JWT Authentication
-
-Passlib + bcrypt for password security
-
-SQLite3 (default DB for development)
-
-✅ Current Status
-
- Project initialized & GitHub repo ready
-
- FastAPI app setup with auth & media routes
-
- JWT authentication implemented
-
- Password hashing with bcrypt
-
- Database models created for users & media
-
- Streaming URL generation implemented
-
- Local testing of endpoints successful
-
- User profile management in progress
-
- Unit tests setup pending
-
-🧪 How to Run Locally
-# Clone the repo
 git clone https://github.com/kamranNabil/BackendMedia.git
 cd BackendMedia
+Create virtual environment
 
-# Create a virtual environment
 python -m venv venv
-.\venv\Scripts\Activate.ps1  # Windows
-# source venv/bin/activate   # macOS/Linux
+source venv/Scripts/Activate.ps1  # Windows PowerShell
+Install dependencies
 
-# Install dependencies
 pip install -r requirements.txt
+Copy .env.example to .env and update variables
 
-# Run the server
-python -m uvicorn main:app --reload --log-level debug
+cp .env.example .env
+# Edit .env as needed
+Run the server
 
+uvicorn app.main:app --reload
+Access the API documentation
 
-API available at 👉 http://127.0.0.1:8000
+http://127.0.0.1:8000/docs
+Docker Setup
+Build the Docker image
 
-📬 Feedback & Contributions
+docker build -t media-backend .
+Run the Docker container
 
-Pull requests and issues are welcome 🚀
-Fork, enhance, and contribute to make the project better!
+docker run -p 8000:8000 media-backend
+Optional: Use docker-compose if defined in docker-compose.yaml
 
-📃 License
+docker-compose up --build
+Running Tests
 
-This project is open source and available under the MIT License.
+pytest tests/
+API Endpoints
+Auth
+
+POST /auth/signup – Register new user
+
+POST /auth/login – Login and receive JWT token
+
+Media
+
+POST /media – Create a media item
+
+GET /media/{id}/stream-url – Get secure stream URL
+
+GET /media/{id}/analytics – Get media analytics (Redis cached)
+
+POST /media/{id}/view – Increment media views (rate-limited)
+
+License
+
+This project is licensed under MIT License.
