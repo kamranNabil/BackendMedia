@@ -64,3 +64,11 @@ async def debug_env():
         "database_url_exists": bool(os.getenv("DATABASE_URL")),
         "all_environment_variables": list(os.environ.keys())
     }
+
+@app.get("/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "redis": "connected" if redis_client.ping() else "disconnected",
+        "service": "BackendMedia API"
+    }
